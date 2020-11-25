@@ -51,7 +51,10 @@ class CsvToJson {
         jsonResult.push(this.buildJsonResult(headers, currentLine));
       }
     }
-    return jsonResult;
+//     for firebase
+    const modified = { users: jsonResult };
+
+    return modified;
   }
 
   getFieldDelimiter() {
