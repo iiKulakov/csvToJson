@@ -3,6 +3,7 @@
 let fileUtils = require("././util/fileUtils");
 let stringUtils = require("././util/stringUtils");
 let jsonUtils = require("././util/jsonUtils");
+const mailUtils = require("././util/mailUtils");
 
 const newLine = /\r?\n/;
 const defaultFieldDelimiter = ";";
@@ -66,12 +67,17 @@ class CsvToJson {
 
   buildJsonResult(headers, currentLine) {
     let jsonObject = {};
+    const {checkEmail} = mailUtils;
+
     for (let j = 0; j < headers.length; j++) {
       let propertyName = stringUtils.trimPropertyName(headers[j]);
 
       let value = currentLine[j];
       if (this.printValueFormatByType) {
         value = stringUtils.getValueFormatByType(currentLine[j]);
+      }
+      if (checkEmail(value)) {
+        value = value.trim().toLowerCase();
       }
       jsonObject[propertyName] = value;
     }
