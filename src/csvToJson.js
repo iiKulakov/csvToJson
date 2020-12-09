@@ -3,7 +3,7 @@
 let fileUtils = require("././util/fileUtils");
 let stringUtils = require("././util/stringUtils");
 let jsonUtils = require("././util/jsonUtils");
-const mailUtils = require("././util/mailUtils");
+const mailUtils = require("././util/mailUtil");
 
 const newLine = /\r?\n/;
 const defaultFieldDelimiter = ";";
