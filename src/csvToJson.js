@@ -1,12 +1,10 @@
-"use strict";
-
-let fileUtils = require("././util/fileUtils");
-let stringUtils = require("././util/stringUtils");
-let jsonUtils = require("././util/jsonUtils");
-const mailUtils = require("././util/mailUtil");
+const fileUtils = require('./util/fileUtils');
+const stringUtils = require('./util/stringUtils');
+const jsonUtils = require('./util/jsonUtils');
+const mailUtils = require('./util/mailUtil');
 
 const newLine = /\r?\n/;
-const defaultFieldDelimiter = ";";
+const defaultFieldDelimiter = ';';
 
 class CsvToJson {
   formatValueByType() {
@@ -20,19 +18,19 @@ class CsvToJson {
   }
 
   generateJsonFileFromCsv(fileInputName, fileOutputName) {
-    let jsonStringified = this.getJsonFromCsvStringified(fileInputName);
+    const jsonStringified = this.getJsonFromCsvStringified(fileInputName);
     fileUtils.writeFile(jsonStringified, fileOutputName);
   }
 
   getJsonFromCsvStringified(fileInputName) {
-    let json = this.getJsonFromCsv(fileInputName);
-    let jsonStringified = JSON.stringify(json, undefined, 1);
+    const json = this.getJsonFromCsv(fileInputName);
+    const jsonStringified = JSON.stringify(json, undefined, 1);
     jsonUtils.validateJson(jsonStringified);
     return jsonStringified;
   }
 
   getJsonFromCsv(fileInputName) {
-    let parsedCsv = fileUtils.readFile(fileInputName);
+    const parsedCsv = fileUtils.readFile(fileInputName);
     return this.csvToJson(parsedCsv);
   }
 
@@ -41,18 +39,18 @@ class CsvToJson {
   }
 
   csvToJson(parsedCsv) {
-    let lines = parsedCsv.split(newLine);
-    let fieldDelimiter = this.getFieldDelimiter();
-    let headers = lines[0].split(fieldDelimiter);
+    const lines = parsedCsv.split(newLine);
+    const fieldDelimiter = this.getFieldDelimiter();
+    const headers = lines[0].split(fieldDelimiter);
 
-    let jsonResult = [];
+    const jsonResult = [];
     for (let i = 1; i < lines.length; i++) {
-      let currentLine = lines[i].split(fieldDelimiter);
+      const currentLine = lines[i].split(fieldDelimiter);
       if (stringUtils.hasContent(currentLine)) {
         jsonResult.push(this.buildJsonResult(headers, currentLine));
       }
     }
-//     for firebase
+    //     for firebase
     const modified = { users: jsonResult };
 
     return modified;
@@ -66,18 +64,20 @@ class CsvToJson {
   }
 
   buildJsonResult(headers, currentLine) {
-    let jsonObject = {};
-    const {checkEmail} = mailUtils;
+    const jsonObject = {};
+    const { checkEmail } = mailUtils;
 
     for (let j = 0; j < headers.length; j++) {
-      let propertyName = stringUtils.trimPropertyName(headers[j]);
+      const propertyName = stringUtils.trimPropertyName(headers[j]);
 
       let value = currentLine[j];
+      const modifiedValue = value.trim().toLowerCase();
+
       if (this.printValueFormatByType) {
         value = stringUtils.getValueFormatByType(currentLine[j]);
       }
-      if (checkEmail(value)) {
-        value = value.trim().toLowerCase();
+      if (checkEmail(modifiedValue)) {
+        value = modifiedValue;
       }
       jsonObject[propertyName] = value;
     }
