@@ -73,9 +73,9 @@ class CsvToJson {
       let value = currentLine[j];
       const modifiedValue = value.trim().toLowerCase();
 
-      if (this.printValueFormatByType) {
-        value = stringUtils.getValueFormatByType(currentLine[j]);
-      }
+      // if (this.printValueFormatByType) {
+      value = stringUtils.getValueFormatByType(currentLine[j]);
+      // }
       if (checkEmail(modifiedValue)) {
         value = modifiedValue;
       }

@@ -7,9 +7,7 @@ class StringUtils {
 
   getValueFormatByType(value) {
     const isNumber = parseInt(value);
-    console.log(123);
     if (!isNaN(isNumber)) {
-      console.log(value);
       return Number(value);
     }
     return String(value);
